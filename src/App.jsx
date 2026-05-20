@@ -6,7 +6,7 @@ import Program from "./pages/Program"
 import Gallery from "./pages/Gallery"
 import Reservation from "./pages/Reservation"
 import Success from "./pages/Success"
-import Cancel from "./pages/cancel"
+import Cancel from "./pages/Cancel"
 import Navbar from "./components/Navbar"
 
 function App() {
