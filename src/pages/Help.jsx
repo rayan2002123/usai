@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import emailjs from "@emailjs/browser"
-import "./Help.css"
+import "./help.css"
 import {
   FaEnvelope,
   FaPhoneAlt,
