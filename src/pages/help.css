@@ -1,0 +1,582 @@
+/* =========================================
+   PAGE
+========================================= */
+
+.help-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 30px 16px 80px;
+
+  background: #f5f7fb;
+
+  box-sizing: border-box;
+}
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.help-card {
+  width: 100%;
+  max-width: 820px;
+
+  background: white;
+  border: 1px solid #e9eef5;
+
+  border-radius: 28px;
+
+  padding: 28px;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05),
+    0 2px 10px rgba(15, 23, 42, 0.03);
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.help-header {
+  text-align: center;
+}
+
+.help-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px 14px;
+
+  border-radius: 999px;
+
+  background: rgba(124, 58, 237, 0.08);
+  color: #7c3aed;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  margin-bottom: 12px;
+}
+
+.help-header h1 {
+  margin: 0;
+
+  font-size: 38px;
+  font-weight: 800;
+
+  color: #0f172a;
+  letter-spacing: -1px;
+}
+
+.help-header p {
+  margin-top: 8px;
+
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* =========================================
+   QUICK QUESTIONS
+========================================= */
+
+.help-quick {
+  display: flex;
+  gap: 10px;
+
+  overflow-x: auto;
+
+  padding-bottom: 4px;
+
+  scrollbar-width: none;
+}
+
+.help-quick::-webkit-scrollbar {
+  display: none;
+}
+
+.help-chip {
+  flex-shrink: 0;
+
+  border: none;
+
+  background: #f1f5f9;
+  color: #334155;
+
+  padding: 10px 16px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.help-chip:hover {
+  background: #7c3aed;
+  color: white;
+
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   CHAT AREA
+========================================= */
+
+.help-chat {
+  height: 500px;
+
+  overflow-y: auto;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+
+.help-chat::-webkit-scrollbar {
+  width: 6px;
+}
+
+.help-chat::-webkit-scrollbar-thumb {
+  background: #dbe4ef;
+  border-radius: 20px;
+}
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.help-msg {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+
+  max-width: 82%;
+}
+
+/* USER */
+
+.help-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+/* BOT */
+
+.help-msg.bot {
+  align-self: flex-start;
+}
+
+/* =========================================
+   AVATAR
+========================================= */
+
+.help-avatar {
+  width: 36px;
+  height: 36px;
+
+  min-width: 36px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: white;
+  border: 1px solid #e2e8f0;
+
+  font-size: 16px;
+}
+
+/* =========================================
+   BUBBLE
+========================================= */
+
+.help-msg span:last-child {
+  padding: 14px 16px;
+
+  border-radius: 18px;
+
+  font-size: 14px;
+  line-height: 1.6;
+
+  word-break: break-word;
+}
+
+/* USER BUBBLE */
+
+.help-msg.user span:last-child {
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #6d28d9
+  );
+
+  color: white;
+
+  border-bottom-right-radius: 6px;
+
+  box-shadow:
+    0 8px 20px rgba(124, 58, 237, 0.25);
+}
+
+/* BOT BUBBLE */
+
+.help-msg.bot span:last-child {
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  color: #0f172a;
+
+  border-bottom-left-radius: 6px;
+}
+
+/* =========================================
+   INPUT
+========================================= */
+
+.help-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.help-field {
+  flex: 1;
+
+  height: 56px;
+
+  border-radius: 18px;
+  border: 1px solid #dbe3ee;
+
+  background: white;
+
+  padding: 0 18px;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+.help-field:focus {
+  border-color: #7c3aed;
+
+  box-shadow:
+    0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.help-btn {
+  height: 56px;
+
+  border: none;
+
+  padding: 0 22px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #6d28d9
+  );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.help-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 20px rgba(124, 58, 237, 0.25);
+}
+
+/* =========================================
+   CONTACT CARD
+========================================= */
+
+.help-contact-card {
+  width: 100%;
+  max-width: 1100px;
+
+  margin-top: 32px;
+
+  background: white;
+
+  border: 1px solid #e9eef5;
+
+  border-radius: 28px;
+
+  padding: 32px;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+/* =========================================
+   CONTACT HEADER
+========================================= */
+
+.help-contact-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.help-contact-header h2 {
+  margin-top: 10px;
+  margin-bottom: 8px;
+
+  font-size: 32px;
+
+  color: #0f172a;
+}
+
+.help-contact-header p {
+  color: #64748b;
+}
+
+/* =========================================
+   CONTACT GRID
+========================================= */
+
+.help-contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+/* =========================================
+   CONTACT INFOS
+========================================= */
+
+.help-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.help-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 16px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  text-decoration: none;
+  color: #0f172a;
+
+  transition: 0.2s ease;
+}
+
+.help-contact-item:hover {
+  transform: translateY(-2px);
+
+  border-color: #7c3aed;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.help-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.help-contact-form input,
+.help-contact-form textarea {
+  width: 100%;
+
+  border-radius: 18px;
+  border: 1px solid #dbe3ee;
+
+  padding: 16px;
+
+  font-size: 15px;
+
+  background: white;
+
+  outline: none;
+
+  resize: none;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+.help-contact-form input:focus,
+.help-contact-form textarea:focus {
+  border-color: #7c3aed;
+
+  box-shadow:
+    0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.help-contact-form button {
+  height: 56px;
+
+  border: none;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #6d28d9
+  );
+
+  color: white;
+
+  font-weight: 700;
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.help-contact-form button:hover {
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+  .help-contact-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .help-card,
+  .help-contact-card {
+    padding: 22px;
+  }
+
+  .help-chat {
+    height: 420px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+  .help-page {
+    padding: 18px 12px 60px;
+  }
+
+  .help-card,
+  .help-contact-card {
+    border-radius: 22px;
+    padding: 18px;
+  }
+
+  .help-header h1 {
+    font-size: 28px;
+  }
+
+  .help-header p {
+    font-size: 13px;
+  }
+
+  .help-chat {
+    height: 380px;
+
+    padding: 12px;
+
+    border-radius: 18px;
+  }
+
+  .help-msg {
+    max-width: 95%;
+  }
+
+  .help-msg span:last-child {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+
+  .help-avatar {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+
+    font-size: 14px;
+  }
+
+  .help-input {
+    flex-direction: column;
+  }
+
+  .help-field {
+    width: 100%;
+    height: 52px;
+  }
+
+  .help-btn {
+    width: 100%;
+    height: 52px;
+  }
+
+  .help-contact-header h2 {
+    font-size: 24px;
+  }
+
+  .help-contact-item {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .help-contact-form input,
+  .help-contact-form textarea {
+    font-size: 14px;
+    padding: 14px;
+  }
+
+  .help-contact-form button {
+    height: 52px;
+    font-size: 14px;
+  }
+}

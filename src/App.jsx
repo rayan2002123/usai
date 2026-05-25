@@ -5,9 +5,11 @@ import Home from "./pages/Home"
 import Program from "./pages/Program"
 import Gallery from "./pages/Gallery"
 import Reservation from "./pages/Reservation"
+import Help from "./pages/Help"
 import Success from "./pages/Success"
-import Cancel from "./pages/Cancel"
+import Cancel from "./pages/cancel"
 import Navbar from "./components/Navbar"
+import AdminReservations from "./pages/AdminReservations"
 
 function App() {
   return (
@@ -24,6 +26,9 @@ function App() {
         <Route path="/programme" element={<Program />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/reservation" element={<Reservation />} />
+        <Route path="/adminreservation" element={<AdminReservations />} />
+        <Route path="/adminreservations" element={<AdminReservations />} />
+        <Route path="/help" element={<Help />} />
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
       </Routes>

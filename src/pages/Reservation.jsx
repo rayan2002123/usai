@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-import { PayPalButtons } from '@paypal/react-paypal-js'
 import './Reservation.css'
 
 function Reservation() {
@@ -19,6 +18,9 @@ function Reservation() {
   ])
 
   const [loading, setLoading] = useState(false)
+
+  const [stripeLoading, setStripeLoading] =
+    useState(false)
 
   const [reservationCode, setReservationCode] =
     useState('')
@@ -81,11 +83,23 @@ function Reservation() {
     return total
   }, [participants, reservationType])
 
+  const totalRealPrice = participants.reduce(
+    (acc, p) => {
+      return acc + (p.sex === 'M' ? 100 : 80)
+    },
+    0
+  )
+
+  const remainingPrice =
+    totalRealPrice - totalPrice
+
   // =========================
   // CREATE RESERVATION
   // =========================
 
   const handleReservation = async () => {
+    if (loading) return
+
     try {
       setLoading(true)
 
@@ -101,8 +115,6 @@ function Reservation() {
       setMessage(
         'Réservation créée avec succès'
       )
-
-      console.log(response.data)
 
       alert(
         reservationType === 'partial'
@@ -141,18 +153,33 @@ function Reservation() {
   // =========================
 
   const finalizeReservation = async () => {
+    if (stripeLoading) return
+
     try {
+      setStripeLoading(true)
+
+      // ✅ montant restant
+      const amount =
+        reservationData.remainingAmount
+
+      // ✅ création session Stripe
       const response = await axios.post(
-        `http://localhost:5000/api/reservations/finalize/${reservationCode}`
+        'http://localhost:5000/api/stripe/create-checkout-session',
+        {
+          amount,
+          email: reservationData.email,
+          reservationId: reservationData._id
+        }
       )
 
-      setReservationData(response.data)
-
-      alert(
-        'Paiement final effectué avec succès'
-      )
+      // ✅ redirect stripe
+      window.location.href =
+        response.data.url
     } catch (err) {
       console.log(err)
+      alert('Erreur Stripe')
+    } finally {
+      setStripeLoading(false)
     }
   }
 
@@ -161,19 +188,45 @@ function Reservation() {
   // =========================
 
   const handleStripeCheckout = async () => {
-    try {
-      const response = await axios.post(
-        'http://localhost:5000/api/stripe/create-checkout-session',
-        {
-          amount: totalPrice,
-          email
-        }
-      )
+    if (stripeLoading) return
 
+    try {
+      setStripeLoading(true)
+
+      // 1. CREATE RESERVATION FIRST
+      const reservationResponse =
+        await axios.post(
+          'http://localhost:5000/api/reservations/create',
+          {
+            email,
+            reservationType,
+            participants
+          }
+        )
+
+      const reservation =
+        reservationResponse.data
+
+      // 2. CREATE STRIPE SESSION
+      const stripeResponse =
+        await axios.post(
+          'http://localhost:5000/api/stripe/create-checkout-session',
+          {
+            amount: totalPrice,
+            email,
+            reservationId:
+              reservation._id // ✅ maintenant ça existe
+          }
+        )
+
+      // 3. REDIRECT
       window.location.href =
-        response.data.url
+        stripeResponse.data.url
     } catch (err) {
       console.log(err)
+      alert('Erreur Stripe')
+    } finally {
+      setStripeLoading(false)
     }
   }
 
@@ -186,9 +239,7 @@ function Reservation() {
         Réservation Riccione 2025
       </motion.h1>
 
-      {/* ========================= */}
       {/* CREATE RESERVATION */}
-      {/* ========================= */}
 
       <motion.div
         className='reservation-card'
@@ -291,7 +342,7 @@ function Reservation() {
               </select>
 
               <textarea
-                placeholder='Préférences / commentaire (facultatif)'
+                placeholder='Préférences / commentaire'
                 value={person.comment}
                 onChange={(e) =>
                   updateParticipant(
@@ -315,15 +366,31 @@ function Reservation() {
           {/* PRICE */}
 
           <div className='price-box'>
-            <h3>Total à payer</h3>
+            <h3>Montant à payer maintenant</h3>
 
             <p>{totalPrice}€</p>
 
-            <small>
-              {reservationType === 'partial'
-                ? '25€ / personne'
-                : '100€ homme • 80€ femme'}
-            </small>
+            {reservationType === 'partial' && (
+              <>
+                <small>
+                  Prix total réel :
+                  {totalRealPrice}€
+                </small>
+
+                <br />
+
+                <small>
+                  Restera à payer :
+                  {remainingPrice}€
+                </small>
+
+                <br />
+
+                <small>
+                  100€ homme • 80€ femme
+                </small>
+              </>
+            )}
           </div>
 
           {/* STRIPE */}
@@ -332,42 +399,11 @@ function Reservation() {
             type='button'
             className='stripe-btn'
             onClick={handleStripeCheckout}
+            disabled={stripeLoading}
           >
-            Payer avec carte bancaire
-          </button>
-
-          {/* PAYPAL */}
-
-          <div className='paypal-box'>
-            <PayPalButtons
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        value: totalPrice.toString()
-                      }
-                    }
-                  ]
-                })
-              }}
-              onApprove={async () => {
-                await handleReservation()
-              }}
-            />
-          </div>
-
-          {/* SUBMIT */}
-
-          <button
-            type='button'
-            className='submit-btn'
-            disabled={loading}
-            onClick={handleReservation}
-          >
-            {loading
-              ? 'Chargement...'
-              : 'Continuer'}
+            {stripeLoading
+              ? 'Redirection...'
+              : 'Payer avec carte bancaire'}
           </button>
 
           {message && (
@@ -378,9 +414,7 @@ function Reservation() {
         </form>
       </motion.div>
 
-      {/* ========================= */}
       {/* FINALIZE */}
-      {/* ========================= */}
 
       <motion.div
         className='reservation-card final'
@@ -411,8 +445,6 @@ function Reservation() {
           Rechercher
         </button>
 
-        {/* RESERVATION FOUND */}
-
         {reservationData && (
           <div className='reservation-details'>
             <h3>
@@ -422,7 +454,6 @@ function Reservation() {
             <div className='details-grid'>
               <div>
                 <strong>Email :</strong>
-
                 <p>
                   {reservationData.email}
                 </p>
@@ -430,7 +461,6 @@ function Reservation() {
 
               <div>
                 <strong>Code :</strong>
-
                 <p>
                   {
                     reservationData.reservationCode
@@ -440,7 +470,6 @@ function Reservation() {
 
               <div>
                 <strong>Total :</strong>
-
                 <p>
                   {
                     reservationData.totalAmount
@@ -451,7 +480,6 @@ function Reservation() {
 
               <div>
                 <strong>Déjà payé :</strong>
-
                 <p>
                   {reservationData.paidAmount}€
                 </p>
@@ -459,7 +487,6 @@ function Reservation() {
 
               <div>
                 <strong>Restant :</strong>
-
                 <p className='remaining'>
                   {
                     reservationData.remainingAmount
@@ -470,7 +497,6 @@ function Reservation() {
 
               <div>
                 <strong>Status :</strong>
-
                 <p>
                   {
                     reservationData.paymentStatus
@@ -515,37 +541,15 @@ function Reservation() {
 
             {reservationData.remainingAmount >
               0 && (
-              <>
-                <button
-                  className='stripe-btn'
-                  onClick={finalizeReservation}
-                >
-                  Finaliser le paiement
-                </button>
-
-                <div className='paypal-box'>
-                  <PayPalButtons
-                    createOrder={(
-                      data,
-                      actions
-                    ) => {
-                      return actions.order.create({
-                        purchase_units: [
-                          {
-                            amount: {
-                              value:
-                                reservationData.remainingAmount.toString()
-                            }
-                          }
-                        ]
-                      })
-                    }}
-                    onApprove={async () => {
-                      await finalizeReservation()
-                    }}
-                  />
-                </div>
-              </>
+              <button
+                className='stripe-btn'
+                onClick={finalizeReservation}
+                disabled={stripeLoading}
+              >
+                {stripeLoading
+                  ? 'Chargement...'
+                  : 'Finaliser le paiement'}
+              </button>
             )}
           </div>
         )}

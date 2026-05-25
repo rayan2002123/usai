@@ -29,6 +29,10 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "auto"
+  }, [open])
+
   return (
     <nav className={`navbar ${hide ? "hide" : ""}`}>
       <div className="logo">
@@ -62,6 +66,15 @@ function Navbar() {
         <Link onClick={closeMenu} className={location.pathname === "/reservation" ? "active" : ""} to="/reservation">
           Réservation
         </Link>
+
+        <Link onClick={closeMenu} className={location.pathname === "/help" ? "active" : ""} to="/help">
+          Help
+        </Link>
+
+        <Link onClick={closeMenu} className={location.pathname === "/adminreservations" ? "active" : ""} to="/adminreservations">
+          Admin
+        </Link>
+        
       </div>
     </nav>
   )
