@@ -7,7 +7,7 @@ import Gallery from "./pages/Gallery"
 import Reservation from "./pages/Reservation"
 import Help from "./pages/Help"
 import Success from "./pages/Success"
-import Cancel from "./pages/cancel"
+import Cancel from "./pages/Cancel"
 import Navbar from "./components/Navbar"
 import AdminReservations from "./pages/AdminReservations"
 
