@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import './Success.css'
+import emailjs from '@emailjs/browser'
 
 function Success() {
   const [reservation, setReservation] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  const API_URL = "https://serve-usai.vercel.app"
 
   useEffect(() => {
     const finalizePayment = async () => {
@@ -12,18 +15,34 @@ function Success() {
         const params = new URLSearchParams(window.location.search)
         const session_id = params.get('session_id')
 
-        if (!session_id) {
-          console.log("Missing session_id")
-          return
-        }
-        
+        if (!session_id) return
+
         const response = await axios.post(
-          'http://localhost:5000/api/stripe/finalize-session',
-          { session_id },
-          { timeout: 10000 }
+          `${API_URL}/api/stripe/finalize-session`,
+          { session_id }
         )
 
-        setReservation(response.data)
+        const reservation = response.data
+        setReservation(reservation)
+
+        // 🔥 EMAILJS SEND ICI
+        await emailjs.send(
+          "service_87ts1wd",
+          "template_ny6mqxb",
+          {
+            to_email: reservation.email,
+            to_name: reservation.name,
+            email: reservation.email,
+
+            code: reservation.reservationCode,
+            total: reservation.totalAmount,
+            paid: reservation.paidAmount,
+            remaining: reservation.remainingAmount,
+            status: reservation.paymentStatus
+          },
+          "VmE0eCAWlKjxdZBY1"
+        )
+
       } catch (err) {
         console.log(err)
       } finally {

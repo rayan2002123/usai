@@ -19,6 +19,8 @@ function Reservation() {
 
   const [loading, setLoading] = useState(false)
 
+  const API_URL = "https://serve-usai.vercel.app"
+
   const [stripeLoading, setStripeLoading] =
     useState(false)
 
@@ -104,7 +106,7 @@ function Reservation() {
       setLoading(true)
 
       const response = await axios.post(
-        'http://localhost:5000/api/reservations/create',
+        `${API_URL}/api/reservations/create`,
         {
           email,
           reservationType,
@@ -137,7 +139,7 @@ function Reservation() {
   const findReservation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/reservations/${reservationCode}`
+        `${API_URL}/api/reservations/${reservationCode}`
       )
 
       setReservationData(response.data)
@@ -164,7 +166,7 @@ function Reservation() {
 
       // ✅ création session Stripe
       const response = await axios.post(
-        'http://localhost:5000/api/stripe/create-checkout-session',
+        `${API_URL}/api/stripe/create-checkout-session`,
         {
           amount,
           email: reservationData.email,
@@ -196,7 +198,7 @@ function Reservation() {
       // 1. CREATE RESERVATION FIRST
       const reservationResponse =
         await axios.post(
-          'http://localhost:5000/api/reservations/create',
+          `${API_URL}/api/reservations/create`,
           {
             email,
             reservationType,
@@ -210,7 +212,7 @@ function Reservation() {
       // 2. CREATE STRIPE SESSION
       const stripeResponse =
         await axios.post(
-          'http://localhost:5000/api/stripe/create-checkout-session',
+          `${API_URL}/api/stripe/create-checkout-session`,
           {
             amount: totalPrice,
             email,

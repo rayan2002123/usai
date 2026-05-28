@@ -11,6 +11,8 @@ export default function AdminReservations() {
 
   const [editingId, setEditingId] = useState(null)
 
+  const API_URL = "https://serve-usai.vercel.app"
+
   const [email, setEmail] = useState("")
   const [reservationType, setReservationType] =
     useState("partial")
@@ -38,7 +40,7 @@ export default function AdminReservations() {
   const fetchReservations = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/adminreservations"
+        `${API_URL}/api/adminreservations`
       )
 
       setReservations(res.data)
@@ -122,12 +124,13 @@ export default function AdminReservations() {
     try {
 
       await axios.post(
-        "http://localhost:5000/api/adminreservations/create",
+        `${API_URL}/api/adminreservations/create`,
        
         {
           email,
           reservationType,
           participants,
+          paidAmount
         }
       )
 
@@ -174,7 +177,7 @@ export default function AdminReservations() {
     try {
 
       await axios.put(
-        `http://localhost:5000/api/adminreservations/${editingId}`,
+        `${API_URL}/api/adminreservations/${editingId}`,
         {
           email,
           reservationType,
@@ -205,7 +208,7 @@ export default function AdminReservations() {
     try {
 
       await axios.delete(
-        `http://localhost:5000/api/adminreservations/${id}`
+        `${API_URL}/api/adminreservations/${id}`
       )
 
       fetchReservations()
@@ -437,9 +440,9 @@ export default function AdminReservations() {
               <h3>{r.email}</h3>
 
               <p><strong>Code :</strong> {r.reservationCode}</p>
-              <p><strong>Total :</strong> {r.totalAmount}€</p>
-              <p><strong>Payé :</strong> {r.paidAmount}€</p>
-              <p><strong>Restant :</strong> {r.remainingAmount}€</p>
+              <p>Total réel : {r.totalAmount}€</p>
+              <p>Payé : {r.paidAmount}€</p>
+              <p>Restant : {r.remainingAmount}€</p>
 
               <span className={`status ${r.paymentStatus}`}>
                 {r.paymentStatus}
